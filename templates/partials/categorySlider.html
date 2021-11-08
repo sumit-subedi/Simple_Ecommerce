@@ -1,0 +1,28 @@
+<h5 style=" text-align: center;" class="pb-2">Shop By Category</h5>
+<div class="owl-carousel popular-slider owl-theme">
+    
+   
+    
+
+    {% for category in categories %}
+    <div class="owl-item" style = 'max-width:55px; max-height:95px; width: 55px;'><img title="{{category.name}}"  src="/media/{{ category.image }}">
+    <figcaption> <span style="text-align: center;"> {{category.name}} </span></figcaption> 
+    </div>
+    {% endfor %}
+
+</div> 
+<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+<script>
+    $(document).ready(function(){
+      $('.owl-carousel').owlCarousel({
+  loop:true,
+  margin:20,
+  
+  items:3,
+  autoWidth:false,
+  autoHeight:true,
+  
+  
+})
+});
+    </script>

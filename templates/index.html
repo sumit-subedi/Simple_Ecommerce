@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-<!-- {% block preloader %}
+<!-- //{% block prelfoader %}
 <div class="preloader">
     <div class="preloader-inner">
         <div class="preloader-icon">
@@ -9,30 +9,73 @@
         </div>
     </div>
 </div>
-{% endblock %} -->
+//{% endblock %} -->
 
 {% block content %}
 
-<div class="product-content ml-2">
-    <h4>Featured Products</h4>
-    <div class="col-xl-3 col-lg-4 col-md-4 col-6">
-        <div class="single-product">
-            <div class="product-img">
-                <a href="product-details.html">
-                    <img class="default-img" max-width="550" max-height="550" src="https://via.placeholder.com/550x750" alt="#">
-                </a>
-                <div class="button-head">
-                    <div class="product-action">
-                        <a title="Wishlist" href="#"><i class=" ti-heart "></i><span>Add to Wishlist</span></a>
-                    </div>
-                    <div class="product-action-2">
-                        <a title="Add to cart" href="#">Add to cart</a>
-                    </div>
-                </div>
-            </div>
-            Siddhartha Rice (30 kg)
+{% include 'partials/categorySlider.html' %}   
 
+<!-- <div class="owl-carousel popular-slider">
+    {% for image in sliderimage %}
+
+    <div class="item"><img src="/media/{{ image.image }}"></div>
+    
+    {% endfor %}
+    
+  </div> -->
+  <style>
+    /* Make the image fully responsive */
+    .carousel-inner img {
+      width: 100%;
+      height: 100%;
+    }
+    </style>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+      <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+        <ol class="carousel-indicators">
+          <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+          <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+          <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+        </ol>
+        <div class="carousel-inner">
+          
+          {% for image in sliderimage %}
+          <div class="carousel-item " style="max-height: 500px;">
+            <img class="d-block " src="/media/{{image.image}}" alt="First slide">
+          </div>
+          {% endfor %}
+          
+        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="sr-only">Next</span>
+        </a>
+      </div>
+      </div>
+
+
+   
+
+<div class="product-content ml-2 mt-3 row">
+    <h5 style="text-align: center;">Featured Products</h5>
+    {% for product in products %}
+      {% include 'partials/featured.html' %}
+    {% endfor %}
 </div>
 
+<script>
+var item = document.getElementsByClassName('carousel-item');
+  item[0].classList.add('active');
+  $(document).ready(function(){
+    
+    $('.carousel').carousel({
+      interval: 4000
+    });
+  })
+</script>
 
 {% endblock %}
