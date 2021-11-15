@@ -1,19 +1,19 @@
 from django.contrib import admin
-from .models import (Product, ProductDescription, ProductImage, Category, SliderImage)
+from .models import (Product, ProductDetails, ProductImage, Category, SliderImage, Cart)
 
 class ProductImageInline(admin.TabularInline):
     model = ProductImage
     extra = 0
     max_num = 6
 
-class ProductDescriptionInline(admin.TabularInline):
-    model = ProductDescription
+class ProductDetailsInline(admin.TabularInline):
+    model = ProductDetails
     extra = 0
     max_num = 4
 
 class ProductAdmin(admin.ModelAdmin):
     # exclude = ['thumbnail']
-    inlines = [ ProductImageInline, ProductDescriptionInline ]
+    inlines = [ ProductImageInline, ProductDetailsInline ]
 
 class SliderImageAdmin(admin.ModelAdmin):
     readonly_fields = ['name']
@@ -25,3 +25,6 @@ class SliderImageAdmin(admin.ModelAdmin):
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Category)
 admin.site.register(SliderImage, SliderImageAdmin)
+
+admin.site.register(Cart)
+

@@ -1,4 +1,11 @@
 from django.db import models
+from django.conf import settings
+
+# from django.contrib.auth.models import User
+# from django.contrib.auth.models import AbstractUser
+
+User = settings.AUTH_USER_MODEL
+
 
 class Category(models.Model):
     name = models.CharField(max_length=20)
@@ -10,9 +17,10 @@ class Category(models.Model):
 
 class Product(models.Model):
     name = models.CharField(max_length=20)
-    without_discount_price = models.IntegerField()
+    without_discount_price = models.IntegerField(null=True)
     with_discount_price = models.IntegerField()
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
+    description = models.TextField()
     out_of_stock = models.BooleanField(default=False)
     thumbnail = models.ImageField(
         upload_to='thumbnail',
@@ -33,7 +41,7 @@ class Product(models.Model):
         import os
 
         # Set our max thumbnail size in a tuple (max width, max height)
-        THUMBNAIL_SIZE = (150, 100)
+        THUMBNAIL_SIZE = (200, 150)
 
         DJANGO_TYPE = self.thumbnail.file.content_type
 
@@ -70,8 +78,8 @@ class Product(models.Model):
         )
 
     def save(self, *args, **kwargs):
-        
-        self.create_thumbnail()
+        if not self.id:
+            self.create_thumbnail()
         force_update = False
 
         # If the instance already has been saved, it has an id and we set 
@@ -90,9 +98,12 @@ class ProductImage(models.Model):
     
     
 
-class ProductDescription(models.Model):
-    product = models.ForeignKey(Product, related_name='description', on_delete=models.CASCADE)
+class ProductDetails(models.Model):
+    product = models.ForeignKey(Product, related_name='details', on_delete=models.CASCADE)
     description = models.TextField()
+
+    def __str__(self):
+        return self.description
 
 class SliderImage(models.Model):
     name = models.CharField(max_length=20)
@@ -100,4 +111,17 @@ class SliderImage(models.Model):
 
     def __str__(self):
         return self.name
+
+class Cart(models.Model):
+    user = models.ForeignKey(User, related_name='cart' ,on_delete=models.CASCADE)
+    item = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.IntegerField()
+
+    def __str__(self):
+        return str(self.item)
+
+    class Meta:
+        unique_together = ('user', 'item',) 
+
+
     

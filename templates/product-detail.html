@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+  .skin-2 .num-in {
+	background: #FFFFFF;
+	box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.15);
+	border-radius: 25px;
+	height: 40px;
+	width: 110px;
+  float: left;
+}
+
+.skin-2 .num-in	span {
+  width: 40%;
+  display: block;
+  height: 40px;
+  float: left;
+  position: relative;
+}
+
+.skin-2 .num-in span:before, .skin-2 .num-in span:after {
+  content: '';
+  position: absolute;
+  background-color: #667780;
+  height: 2px;
+  width: 10px;
+  top: 50%;
+  left: 50%;
+  margin-top: -1px;
+  margin-left: -5px;
+}
+
+.skin-2 .num-in span.plus:after {
+  transform: rotate(90deg);
+}
+
+.skin-2 .num-in input {
+		float: left;
+		width: 20%;
+		height: 40px;
+		border: none;
+		text-align: center;
+}
+
+</style>
+
+
+<div class="container">
+    <div class="large" style="font-size: large; font-weight: 500; margin-bottom: 10px;">{{product}}</div>
+
+    <div class="owl-carousel popular-slider owl-theme">
+    
+
+        {% for image in product.images.all %}
+        <div class="owl-item" >
+            <img title="{{category.name}}"  src="/media/{{ image.image }}">
+        
+        </div>
+        {% endfor %}
+    
+    </div> 
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function(){
+          $('.owl-carousel').owlCarousel({
+      loop:false,
+      margin:20,
+      
+      items:1,
+      autoWidth:false,
+      autoHeight:true,
+      
+      
+    })
+    });
+        </script>
+
+    <div class="large" style="font-size: large; font-weight: 500;">
+        <p>Price</p>
+        <span>R.S. {{product.with_discount_price}} &nbsp;</span>  
+        {% if product.without_discount_price %}
+        <span style="text-decoration:line-through;color:red;">R.S. {{product.without_discount_price}}</span>
+        {% endif %}
+
+        <p class="max-lines text-justify">{{product.description}} </p>
+        <form method="post" action="{% url 'addtocart' product.id %}">
+          {% csrf_token %}
+          <br>
+          <div class="num-block skin-2" style="float: left;">
+            <div class="num-in">
+              <span class="minus dis"></span>
+              <input type="text" class="in-num" value="1" readonly="" name="quantity">
+              <span class="plus"></span>
+            </div>
+          </div>
+          <input type="text" value="{{request.path}}" hidden name="path">
+        <button type="submit" style="float: right; "  name="add" data-add-to-cart="" style="border-radius: 10px; background-color: transparent; color: #ccc;" 
+        class="btn  btn-secondary mb-3" >
+              Add to cart
+          </button>
+
+        </form>
+
+          <div class="large" 
+          style="font-size: large; font-weight: 500; margin: 15px 0 ; clear: both; border-top: 2px solid #bbb;">Details</div>
+          {% if product.details.all %}
+          <ul >
+              {% for detail in product.details.all %}
+                <li class="small" style="list-style :disc">{{detail}}</li>
+              {% endfor %}
+          </ul>
+          {% else %}
+<p> Detail for this product is not available </p>
+          {% endif %}
+
+    </div>
+
+
+
+
+
+</div>
+<script>
+  $(document).ready(function() {
+  $('.num-in span').click(function () {
+      var $input = $(this).parents('.num-block').find('input.in-num');
+    if($(this).hasClass('minus')) {
+      var count = parseFloat($input.val()) - 1;
+      count = count < 1 ? 1 : count;
+      if (count < 2) {
+        $(this).addClass('dis');
+      }
+      else {
+        $(this).removeClass('dis');
+      }
+      $input.val(count);
+    }
+    else {
+      var count = parseFloat($input.val()) + 1
+      $input.val(count);
+      if (count > 1) {
+        $(this).parents('.num-block').find(('.minus')).removeClass('dis');
+      }
+    }
+    
+    $input.change();
+    return false;
+  });
+  
+});
+</script>
+
+{% endblock %}

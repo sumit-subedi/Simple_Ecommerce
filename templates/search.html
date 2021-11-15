@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+    {% if products %}
+    <h5 style="color: lightsalmon; margin-bottom: 10px;">Search result for '{{query}}'</h5>
+<div class="">
+    {% for product in products %}
+        {% include 'partials/product-list.html' %}
+    {% endfor %}
+
+   
+
+<div class="pagination">
+    <span class="step-links">
+        {% if products.has_previous %}
+            <a href="?search={{query}}&page={{ products.previous_page_number }}" 
+            style="text-decoration: underline; color: lightskyblue;">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ products.number }} of {{ products.paginator.num_pages }}.
+        </span>
+
+        {% if products.has_next %}
+            <a href="?search={{query}}&page={{ products.next_page_number }}" style="text-decoration: underline; color: lightskyblue;">next</a>
+        {% endif %}
+    </span>
+</div>
+</div>
+    {% else %}
+    <h5 style="color: lightsalmon; margin-bottom: 10px; line-height: 25px; text-align: justify;">
+        Sorry no matching result found for '{{query}}'. Try something else!</h5>
+
+    {% endif %}
+</div>
+{% endblock %}

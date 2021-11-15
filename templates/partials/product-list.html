@@ -1,0 +1,38 @@
+
+<div class="row" style="margin-bottom: 10px;">
+    
+        <div class="product-img
+         col-4" style="padding: 0; border: 2px solid #333;" >
+            <a href="{% url 'product-details' product.id %}" style="width: 100%; height: 100%;">
+                <img class="default-img" width="200" height="150"  src="/media/{{product.thumbnail}}" 
+                alt="Image Not found">
+            </a>
+           
+        </div>
+        
+
+        <a href="{% url 'product-details' product.id %}">
+<div class="product-detail col pl-4" >
+    <div style="font-size: larger; padding-bottom: 10px; font-weight: 600;">{{product.name}} </div>
+    <span>R.S. {{product.with_discount_price}} &nbsp;</span>  
+    <span style="text-decoration:line-through;color:red;">R.S. {{product.without_discount_price}}</span>
+    <form method="post" action="{% url 'addtocart' product.id %}">
+        {% csrf_token %}
+        <br>
+        <div class="num-block skin-2" style="float: left;">
+          <div class="num-in">
+            <span class="minus dis"></span>
+            <input type="hidden" class="in-num" value="1" readonly="" name="quantity">
+            <span class="plus"></span>
+          </div>
+        </div>
+        <input type="text" value="{{request.path}}?{{ request.GET.urlencode }}" hidden name="path">
+      <button type="submit" style="float: right; "  name="add" data-add-to-cart="" style="border-radius: 10px; background-color: transparent; color: #ccc;" 
+      class="btn  btn-secondary mb-3" >
+            Add to cart
+        </button>
+
+      </form>
+</div>
+</a>
+</div>

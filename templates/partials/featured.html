@@ -1,7 +1,7 @@
-<div class="col-xl-3 col-lg-4 col-md-4 col-6" style="max-width: 49%;padding: 0; margin: 0; ">
+<div class="col-xl-3 col-lg-4 col-md-4 col-6" style="max-width: 46%;padding: 0; margin: 1%; ">
     <div class="single-product">
         <div class="product-img" style="max-width: 90%; margin: 15px 15px; ">
-            <a href="product-details.html">
+            <a href="{% url 'product-details' product.id %}">
                 <img class="default-img" style="border: 1px solid #ccc;"  src="/media/{{product.thumbnail}}" alt="Image Not found">
             </a>
             <div class="button-head">
@@ -14,7 +14,7 @@
             </div>
         </div>
         <div class="product-detail" style="text-align: center;">
-        <h6>{{product.name}}</h6>
+        <div style="font-size: 400; font-weight: 500;">{{product.name}} </div>
         <span>R.S. {{product.with_discount_price}} &nbsp;</span>  
         <span style="text-decoration:line-through;color:red;">R.S. {{product.without_discount_price}}</span>
     </div>
