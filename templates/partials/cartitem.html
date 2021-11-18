@@ -1,0 +1,27 @@
+<div class="row mb-3 " id="item{{product.id}}" style="border: 1px solid #888; margin: 0; " >
+    <div class="col-5" style="padding: 0;">
+        <img src='/media/{{product.item.thumbnail}}' height="" alt='Imagfe not found'>
+    </div>
+    <div class="col-7">
+        <div class="max-length mb-2" >{{product.item}}</div>
+        <form method="get" action = "{% url 'addtocart' product.id %}" id="form{{product.id}}">
+          <div class="num-block skin-2 mb-2" style="float: left;">
+            <div class="num-in">
+              <span class="minus dis"></span>
+              <input type="text" class="in-num" value="{{product.quantity}}" id="test"  readonly="" name="quantity"
+               onchange="callhtmx({{product.id}}, this.value)" >
+              <span class="plus"></span>
+            </div>
+          </div>
+        </form>
+          <span>R.S. <script>document.write(parseInt({{product.item.with_discount_price}}) * parseInt({{product.quantity}}))</script>  &nbsp;</span>  
+        {% if product.item.without_discount_price %}
+        <span style="text-decoration:line-through;color:red;">R.S. <script>document.write(parseInt({{product.item.without_discount_price}}) * parseInt({{product.quantity}}))</script></span>
+        {% endif %}
+          
+        
+       
+
+    </div>
+</div>
+

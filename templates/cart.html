@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<style>
+    .skin-2 .num-in {
+      background: #FFFFFF;
+      box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.15);
+      border-radius: 25px;
+      height: 40px;
+      width: 150px;
+    float: left;
+  }
+  
+  .skin-2 .num-in	span {
+    width: 40%;
+    display: block;
+    height: 40px;
+    float: left;
+    position: relative;
+  }
+  
+  .skin-2 .num-in span:before, .skin-2 .num-in span:after {
+    content: '';
+    position: absolute;
+    background-color: #667780;
+    height: 2px;
+    width: 10px;
+    top: 50%;
+    left: 50%;
+    margin-top: -1px;
+    margin-left: -5px;
+  }
+  
+  .skin-2 .num-in span.plus:after {
+    transform: rotate(90deg);
+  }
+  
+  .skin-2 .num-in input {
+          float: left;
+          width: 20%;
+          height: 40px;
+          border: none;
+          text-align: center;
+  }
+  .bottom{
+    position: fixed;
+    bottom: 0;
+    height: 80px;
+    width: 100%;
+    margin: 0 -8px;
+    border : 1px solid #ccc;
+
+  }
+  
+  </style>
+
+{% for product in products %}
+
+{% include 'partials/cartitem.html' %}
+
+
+{% empty %}
+
+<h4 > Sorry, no item in cart. But you can always add it from <a href="{% url 'home' %}">here</a> </h4>
+{% endfor %}
+<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+
+        <script>
+          function callhtmx(id, quan){
+              console.log(id, quan);
+              var form =document.getElementById("form"+id);
+              form.submit()
+              
+          }
+        </script>
+<script>
+    $(document).ready(function() {
+    $('.num-in span').click(function () {
+        var $input = $(this).parents('.num-block').find('input.in-num');
+      if($(this).hasClass('minus')) {
+        var count = parseFloat($input.val()) - 1;
+        count = count < 1 ? 1 : count;
+        if (count < 2) {
+          $(this).addClass('dis');
+        }
+        else {
+          $(this).removeClass('dis');
+        }
+        $input.val(count);
+      }
+      else {
+        var count = parseFloat($input.val()) + 1
+        $input.val(count);
+        if (count > 1) {
+          $(this).parents('.num-block').find(('.minus')).removeClass('dis');
+        }
+      }
+      
+    //   $input.change();
+    //   var event = new Event('change');
+    //   $input.dispatchEvent(event);
+    $input.trigger("change");
+      return false;
+    });
+    
+  });
+  </script>
+
+  <div class="bottom">
+    <div class="row">
+      <div class="col-5 mt-2 ml-2">
+        <h6>Total Sum
+          <br>
+         <p class="black mt-2"> <b>R.S. {{sum}}</b></p>
+        </h6>
+      </div>
+      <div class="col m-2">
+        <button class="btn " style="background-color:rgba(43, 9, 231, 0.801)"> Place Order</button>
+
+      </div>
+    </div>
+
+  </div>
+
+{% endblock %}

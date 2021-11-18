@@ -58,14 +58,40 @@ def product_details(request, pk):
 
 @login_required(login_url='/accounts/login') 
 def addtocart(request, pk):
-    product = Product.objects.get(id = pk)
-    if Cart.objects.filter(user = request.user, item = product).exists():
-        print('here')
-        messages.error(request, 'Item already in cart.')
-        # messages.add_message(request, messages.INFO, 'Signout Successful.')
+    if request.method == 'POST':
+        product = Product.objects.get(id = pk)
+        if Cart.objects.filter(user = request.user, item = product).exists():
+            print('here')
+            messages.error(request, 'Item already in cart.')
+            # messages.add_message(request, messages.INFO, 'Signout Successful.')
+            return redirect(request.POST['path'])
+        cart = Cart(user = request.user, item = product, quantity = request.POST['quantity'])
+        cart.save()
+        messages.success(request, 'Item successfully added to the cart')
         return redirect(request.POST['path'])
-    cart = Cart(user = request.user, item = product, quantity = request.POST['quantity'])
-    cart.save()
-    messages.success(request, 'Item successfully added to the cart')
-    return redirect(request.POST['path'])
+    
+    cartitem = Cart.objects.get(id = pk)
+    cartitem.quantity = int(request.GET['quantity'])
+    cartitem.save()
+    products = Cart.objects.filter(user = request.user)
+    sum = 0
+    for product in products:
+        sum += (product.item.with_discount_price) * product.quantity
+    context = {
+        'product': cartitem,
+        'sum': sum
+    }
+    return redirect('/cart')
+
+@login_required(login_url='/accounts/login') 
+def cart(request):
+    products = Cart.objects.filter(user = request.user)
+    sum = 0
+    for product in products:
+        sum += (product.item.with_discount_price) * product.quantity
+    context = {
+        'products': products,
+        'sum': sum
+    }
+    return render(request, 'cart.html', context)
 
