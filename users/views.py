@@ -1,7 +1,7 @@
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 
-from .models import Cart, SliderImage, Category, Product
+from .models import Cart, SliderImage, Category, Product,  order, ordered_item
 from django.db.models import Q
 from django.core.paginator import Paginator
 from django.contrib import messages
@@ -94,4 +94,31 @@ def cart(request):
         'sum': sum
     }
     return render(request, 'cart.html', context)
+
+@login_required(login_url='/accounts/login') 
+def confirmOrder(request):
+    if request.method == 'GET':
+        products = Cart.objects.filter(user = request.user)
+        sum = 0
+        if len(products) == 0:
+            messages.info(request,'Order cannot be placed')
+            return redirect( 'cart')
+        for product in products:
+            sum += (product.item.with_discount_price) * product.quantity
+        context = {
+            'products': products,
+            'sum' : sum
+        }
+        return render(request, 'confirmorder.html', context)
+    if request.method == 'POST':
+        cartitems = Cart.objects.filter(user = request.user)
+        orderobj = order(user = request.user, order_address = request.POST['address'],
+                    delivery_name = request.POST['name'], delivery_phone = request.POST['phone'])
+        orderobj.save()
+        for item in cartitems:
+            orderitem = ordered_item(order = orderobj, item = item.item,
+                        itemname = item.item.name, quantity = item.quantity, price = item.item.with_discount_price)
+            orderitem.save()
+            item.delete()
+        return redirect ('home')
 

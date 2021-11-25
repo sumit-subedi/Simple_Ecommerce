@@ -107,7 +107,7 @@
   });
   </script>
 
-  <div class="bottom">
+  <div class="bottom" style="background-color: white;">
     <div class="row">
       <div class="col-5 mt-2 ml-2">
         <h6>Total Sum
@@ -116,7 +116,8 @@
         </h6>
       </div>
       <div class="col m-2">
-        <button class="btn " style="background-color:rgba(43, 9, 231, 0.801)"> Place Order</button>
+        <a  href="{% url 'confirmorder' %}" ><button class="btn" style="background-color:rgba(43, 9, 231, 0.801)"> 
+          Place Order</button></a>
 
       </div>
     </div>

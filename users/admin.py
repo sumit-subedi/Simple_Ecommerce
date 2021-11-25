@@ -1,5 +1,7 @@
 from django.contrib import admin
-from .models import (Product, ProductDetails, ProductImage, Category, SliderImage, Cart)
+from django.db.models import fields
+from .models import (Product, ProductDetails, ProductImage, Category, SliderImage, Cart,
+                    order, ordered_item, temp_order)
 
 class ProductImageInline(admin.TabularInline):
     model = ProductImage
@@ -22,9 +24,32 @@ class SliderImageAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):
         return False
 
+
+class TempOrderAdmin(admin.ModelAdmin):
+    
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.filter(delivered = False)
+    # order_date = models.DateField(auto_now_add=True)
+    # order_address = models.CharField(max_length=50)
+    # delivery_name = models.CharField(max_length=50)
+    # delivery_phone = models.IntegerField()
+
+    
+    def user(self, obj):
+        return obj.order.user
+    
+    def address(self, obj):
+        return obj.order.order_address
+    
+
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Category)
 admin.site.register(SliderImage, SliderImageAdmin)
 
 admin.site.register(Cart)
+
+admin.site.register(order)
+admin.site.register(temp_order, TempOrderAdmin)
+admin.site.register(ordered_item)
 

@@ -41,6 +41,9 @@ class CustomUserManager(BaseUserManager):
 class CustomUser(AbstractUser):
     username = None
     phone = models.IntegerField( unique=True, verbose_name='Phone Number', blank=False, help_text='Enter 10 digits phone number')
+    name = models.CharField(max_length=30)
+    address_city = models.CharField(max_length=30)
+    address_road = models.CharField(max_length=50)
 
     USERNAME_FIELD = 'phone'
     REQUIRED_FIELDS = []

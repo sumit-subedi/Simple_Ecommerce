@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+    .bottom{
+    position: fixed;
+    bottom: 0;
+    height: 80px;
+    width: 100%;
+    margin: 0 -8px;
+    border : 1px solid #ccc;
+
+  }
+</style>
+<h6 class="ml-4">Delivery Details:</h6>
+    <form action="{% url 'confirmorder' %}" method="post" id="confirmform" class="form-group row mt-2 mb-4 ml-1 mr-0">
+        {% csrf_token %}
+<div class="col-6 mr-1 ">
+    <label for="" class="col-form-label"><b>For:</b></label>
+        <input type="text"  class="col-4 form-control" name="name" style="max-width: 100%;" value="{{request.user.name}}">
+</div>
+        <div class="col-4 mr-1">
+            <label for="" ><b> City: </b></label>
+            <input type="text" name="city" class="form-control" style="max-width: 100%;" value="{{request.user.address_city}}" readonly>
+
+        </div>
+        <br>
+        <div class="col-6 mt-1">
+            <label for=""> <b>Recipient Number </b></label>
+            <input type="number" name="phone" value="{{request.user}}">
+        </div>
+        <br>
+        <div class="col-7 mt-2">
+        <label for=""> <b>Delivery Address </b></label>
+        <input type="text" name="address" value="{{request.user.address_road}}">
+    </div>
+    
+    </form>
+
+
+<div class="container mt-2 pt-4" style="margin-bottom: 80px; border-top: 1px solid #999;">
+    <h6 class="mb-2">Delivery Items:</h6>
+    {% for product in products %}
+    <div class="row mb-3 " id="item{{product.id}}" style="border: 1px solid #888; margin: 0; " >
+        <div class="col-3" style="padding: 0;">
+            <img src='/media/{{product.item.thumbnail}}' height="" alt='Imagfe not found'>
+        </div>
+        <div class="col-7">
+            <div class="max-length mb-2" >{{product.item}}</div>
+            <h6 class="mb-1">Qty:{{product.quantity}}</h6>
+              <span>R.S. <script>document.write(parseInt({{product.item.with_discount_price}}) * parseInt({{product.quantity}}))</script>  &nbsp;</span>  
+
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="bottom container" style="background-color: white;">
+    
+    <h6 class="mt-2 ml-2" style="color: rgb(87, 83, 83);"> <span>Total : R.S. {{sum}}</span> &nbsp; &nbsp; 
+        <span>Payment Mode : Cash</span></h6>
+        <button class=" btn-info mt-1 btn-sm mr-4"><a href="{% url 'cart' %}">Go Back</a></button>
+        <button class=" btn-info mt-1 ml-4 btn-sm" type="submit" form="confirmform" >Confirm Order</button>
+    
+    
+</div>
+
+
+{% endblock %}

@@ -124,4 +124,32 @@ class Cart(models.Model):
         unique_together = ('user', 'item',) 
 
 
+class order(models.Model):
+    
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    order_id = models.AutoField(primary_key=True)
+    order_date = models.DateField(auto_now_add=True)
+    order_address = models.CharField(max_length=50)
+    delivery_name = models.CharField(max_length=50)
+    delivery_phone = models.IntegerField()
+    delivered = models.BooleanField(default = False)
+    out_for_delivery = models.BooleanField(default = False)
+
+    def __str__(self):
+        return str(self.order_id)
+
+    
+
+class temp_order(order):
+    class Meta:
+        proxy = True
+    
+
+class ordered_item(models.Model):
+    order = models.ForeignKey(order, on_delete=models.CASCADE)
+    item = models.ForeignKey(Product, null=True, on_delete=models.SET_NULL)
+    itemname = models.CharField(max_length=100)
+    quantity = models.IntegerField()
+    price = models.IntegerField()
+
     
